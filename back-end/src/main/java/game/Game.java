@@ -40,6 +40,13 @@ public class Game {
         return this.player;
     }
 
+    public Game undo() {
+        if (this.history.size() == 0) {
+            return this;
+        }
+        return this.history.get(this.history.size() - 1);
+    }
+
     public Game play(int x, int y) {
         if (this.board.getCell(x, y) != null)
             return this;
