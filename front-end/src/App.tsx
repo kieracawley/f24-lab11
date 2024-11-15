@@ -34,7 +34,7 @@ class App extends React.Component<Props, GameState> {
     /**
      * state has type GameState as specified in the class inheritance.
      */
-    this.state = { cells: [] }
+    this.state = { cells: [], player: 0, winner: -1 }
   }
 
   /**
@@ -45,8 +45,9 @@ class App extends React.Component<Props, GameState> {
   newGame = async () => {
     const response = await fetch('/newgame');
     const json = await response.json();
-    this.setState({ cells: json['cells'] });
+    this.setState({ cells: json['cells'], player: json['player'], winner: json['winner']});
   }
+
 
   /**
    * play will generate an anonymous function that the component
@@ -61,7 +62,7 @@ class App extends React.Component<Props, GameState> {
       e.preventDefault();
       const response = await fetch(`/play?x=${x}&y=${y}`)
       const json = await response.json();
-      this.setState({ cells: json['cells'] });
+      this.setState({ cells: json['cells'], player: json['player'], winner: json['winner'] });
     }
   }
 
@@ -118,6 +119,7 @@ class App extends React.Component<Props, GameState> {
         <div id="board">
           {this.state.cells.map((cell, i) => this.createCell(cell, i))}
         </div>
+        <div id="instructions">{this.state.winner == -1 ? "Player " + this.state.player + "\'s Turn" : "Winner: Player " + this.state.winner}</div>
         <div id="bottombar">
           <button onClick={/* get the function, not call the function */this.newGame}>New Game</button>
           {/* Exercise: implement Undo function */}
